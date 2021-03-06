@@ -3,18 +3,19 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		87DC2D531CB86ED4F81549FA /* Pods_ReminderApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3A2DA042F536ACD13FCAAB3 /* Pods_ReminderApp.framework */; };
 		8E761EDB25F3625100C70461 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E761EDA25F3625100C70461 /* AppDelegate.swift */; };
 		8E761EDD25F3625100C70461 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E761EDC25F3625100C70461 /* SceneDelegate.swift */; };
-		8E761EDF25F3625100C70461 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E761EDE25F3625100C70461 /* ViewController.swift */; };
+		8E761EDF25F3625100C70461 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E761EDE25F3625100C70461 /* FirstViewController.swift */; };
 		8E761EE225F3625100C70461 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E761EE025F3625100C70461 /* Main.storyboard */; };
 		8E761EE525F3625100C70461 /* ReminderApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8E761EE325F3625100C70461 /* ReminderApp.xcdatamodeld */; };
 		8E761EE725F3625A00C70461 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E761EE625F3625A00C70461 /* Assets.xcassets */; };
 		8E761EEA25F3625A00C70461 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8E761EE825F3625A00C70461 /* LaunchScreen.storyboard */; };
+		8E761EF225F367E400C70461 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E761EF125F367E400C70461 /* SecondViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,12 +23,13 @@
 		8E761ED725F3625100C70461 /* ReminderApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReminderApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E761EDA25F3625100C70461 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8E761EDC25F3625100C70461 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		8E761EDE25F3625100C70461 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8E761EDE25F3625100C70461 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
 		8E761EE125F3625100C70461 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8E761EE425F3625100C70461 /* ReminderApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ReminderApp.xcdatamodel; sourceTree = "<group>"; };
 		8E761EE625F3625A00C70461 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8E761EE925F3625A00C70461 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8E761EEB25F3625A00C70461 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8E761EF125F367E400C70461 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		92A6FC043205BD7714BBDA07 /* Pods-ReminderApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReminderApp.debug.xcconfig"; path = "Target Support Files/Pods-ReminderApp/Pods-ReminderApp.debug.xcconfig"; sourceTree = "<group>"; };
 		D3A2DA042F536ACD13FCAAB3 /* Pods_ReminderApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ReminderApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -75,7 +77,8 @@
 			children = (
 				8E761EDA25F3625100C70461 /* AppDelegate.swift */,
 				8E761EDC25F3625100C70461 /* SceneDelegate.swift */,
-				8E761EDE25F3625100C70461 /* ViewController.swift */,
+				8E761EDE25F3625100C70461 /* FirstViewController.swift */,
+				8E761EF125F367E400C70461 /* SecondViewController.swift */,
 				8E761EE025F3625100C70461 /* Main.storyboard */,
 				8E761EE625F3625A00C70461 /* Assets.xcassets */,
 				8E761EE825F3625A00C70461 /* LaunchScreen.storyboard */,
@@ -91,7 +94,6 @@
 				92A6FC043205BD7714BBDA07 /* Pods-ReminderApp.debug.xcconfig */,
 				52EDCF8430EE9474D48E6898 /* Pods-ReminderApp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -210,9 +212,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8E761EDF25F3625100C70461 /* ViewController.swift in Sources */,
+				8E761EDF25F3625100C70461 /* FirstViewController.swift in Sources */,
 				8E761EDB25F3625100C70461 /* AppDelegate.swift in Sources */,
 				8E761EDD25F3625100C70461 /* SceneDelegate.swift in Sources */,
+				8E761EF225F367E400C70461 /* SecondViewController.swift in Sources */,
 				8E761EE525F3625100C70461 /* ReminderApp.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
