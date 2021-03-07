@@ -58,6 +58,12 @@ class SecondViewController : UIViewController, UITextFieldDelegate, UITextViewDe
         dateTimeTF.placeholder = "Tap to set date & time"
         dateTimeTF.setBorderColor(color: .systemGray)
         
+        let dateTimepicker = UIDatePicker()
+        dateTimepicker.datePickerMode = .dateAndTime
+        dateTimepicker.addTarget(self, action: #selector(changeDateTime), for: .valueChanged)
+        
+        dateTimeTF.inputView = dateTimepicker
+        
         let submitB = UIButton(frame: CGRect(x: 20, y: screenHeight - bottomPadding - 70, width: objectWidth, height: 50))
         view.addSubview(submitB)
         
@@ -67,6 +73,19 @@ class SecondViewController : UIViewController, UITextFieldDelegate, UITextViewDe
         
         submitB.addTarget(self, action: #selector(submitRecord), for: .touchUpInside)
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
+        //aTextField.resignFirstResponder()
+        self.view.endEditing(true)
+    }
+    
+    @objc func changeDateTime(sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM-yyyy HH:mm"
+        dateTimeTF.text = dateFormatter.string(from: sender.date)
     }
     
     @objc func submitRecord() {
@@ -85,6 +104,7 @@ class SecondViewController : UIViewController, UITextFieldDelegate, UITextViewDe
         
         if errorMsg == "" {
             //call store data function
+            addNewEntry(title: titleTF.text!, desc: descTV.text, dateTime: (dateTimeTF.text?.format())!)
         }else{
             // show popup
             let alertVC = UIAlertController(title: "Missing Field(s)", message: "Kindly fill in the following :" + errorMsg, preferredStyle: .alert)
@@ -93,7 +113,7 @@ class SecondViewController : UIViewController, UITextFieldDelegate, UITextViewDe
         }
     }
     
-    func addNewEntry() {
+    func addNewEntry(title: String, desc: String, dateTime: Date) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -101,14 +121,20 @@ class SecondViewController : UIViewController, UITextFieldDelegate, UITextViewDe
         let userEntity = NSEntityDescription.entity(forEntityName: "Entry", in: managedContext)!
         
         let user = NSManagedObject(entity: userEntity, insertInto: managedContext)
-        user.setValue("", forKey: "title") // for title
-        user.setValue("", forKey: "desc") // for description
-        user.setValue("", forKey: "dateTime") // for date in date & time format
+        user.setValue(title, forKey: "title") // for title
+        user.setValue(desc, forKey: "desc") // for description
+        user.setValue(dateTime, forKey: "dateTime") // for date in date & time format
         
         do {
             try managedContext.save()
+            
+            let alertVC = UIAlertController(title: "Success", message: "Added new record with title : \"\(title)\"", preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "Thank you", style: .cancel, handler: nil))
+            self.present(alertVC, animated: true, completion: nil)
+            
         } catch let error as NSError {
             hud.textLabel.text = error.localizedDescription
+            hud.show(in: self.view)
             hud.dismiss(afterDelay: 3.0, animated: true)
         }
         
@@ -142,7 +168,7 @@ class SecondViewController : UIViewController, UITextFieldDelegate, UITextViewDe
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "Placeholder"
+            textView.text = "Set Description Here.."
             textView.textColor = UIColor.lightGray
         }
     }

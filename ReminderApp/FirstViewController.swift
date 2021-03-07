@@ -44,7 +44,7 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         tableView.separatorColor = .black
         tableView.separatorStyle = .singleLine
         
-        let addNewB = UIButton(frame: CGRect(x: screenWidth - 90, y: screenHeight - 90, width: 70, height: 70))
+        let addNewB = UIButton(frame: CGRect(x: screenWidth - 90, y: screenHeight - bottomPadding - 90, width: 70, height: 70))
         view.addSubview(addNewB)
         
         addNewB.backgroundColor = .systemBlue
@@ -178,8 +178,8 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Entry")
         
-        //let sort = NSSortDescriptor(key: #keyPath(Entry.dateTime), ascending: false)
-        //fetchRequest.sortDescriptors = [sort]
+        let sort = NSSortDescriptor(key: #keyPath(Entry.dateTime), ascending: false)
+        fetchRequest.sortDescriptors = [sort]
         
         do {
             let result = try managedContext.fetch(fetchRequest)
