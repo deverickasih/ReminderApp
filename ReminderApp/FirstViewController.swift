@@ -24,6 +24,8 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        self.navigationController?.navigationBar.topItem?.title = "Reminders"
+        
         let window = UIApplication.shared.windows[0]
         let topPadding = window.safeAreaInsets.top
         let bottomPadding = window.safeAreaInsets.bottom
@@ -47,6 +49,14 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         addNewB.layer.cornerRadius = 35.0
         addNewB.layer.masksToBounds = true
         
+        addNewB.addTarget(self, action: #selector(toNextView), for: .touchUpInside)
+        
+    }
+    
+    @objc func toNextView() {
+        print("came here")
+        let nvc = SecondViewController(nibName: nil, bundle: nil)
+        self.navigationController?.pushViewController(nvc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
