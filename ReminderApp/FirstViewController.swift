@@ -20,6 +20,9 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var tableView : UITableView!
     var tableViewArray : [NSManagedObject] = []
     
+    var topPadding : CGFloat = 0
+    var bottomPadding : CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -27,8 +30,8 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationController?.navigationBar.topItem?.title = "Reminders"
         
         let window = UIApplication.shared.windows[0]
-        let topPadding = window.safeAreaInsets.top
-        let bottomPadding = window.safeAreaInsets.bottom
+        topPadding = window.safeAreaInsets.top
+        bottomPadding = window.safeAreaInsets.bottom
         
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
@@ -56,6 +59,8 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @objc func toNextView() {
         print("came here")
         let nvc = SecondViewController(nibName: nil, bundle: nil)
+        nvc.topPadding = topPadding
+        nvc.bottomPadding = bottomPadding
         self.navigationController?.pushViewController(nvc, animated: true)
     }
     
