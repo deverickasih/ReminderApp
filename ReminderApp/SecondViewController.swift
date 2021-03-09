@@ -78,7 +78,6 @@ class SecondViewController : UIViewController, UITextFieldDelegate, UITextViewDe
     }
     
     @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
-        //aTextField.resignFirstResponder()
         self.view.endEditing(true)
     }
     
@@ -185,11 +184,7 @@ extension UIView {
 
 extension UIViewController {
 
-    /**
-     *  Height of status bar + navigation bar (if navigation bar exist)
-     */
-
     var navBarHeight: CGFloat {
-        return (self.navigationController?.navigationBar.frame.height ?? 0.0)
+        return 44//(self.navigationController?.navigationBar.frame.height ?? 0.0)
     }
 }

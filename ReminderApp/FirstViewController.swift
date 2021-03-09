@@ -12,13 +12,14 @@ import Alamofire
 import SwiftyJSON
 import JGProgressHUD
 
-class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
     let hud = JGProgressHUD(style: .dark)
     let defaults = UserDefaults.standard
     
     var tableView : UITableView!
     var tableViewArray : [NSManagedObject] = []
+    var filteredArray : [NSManagedObject] = []
     
     var topPadding : CGFloat = 0
     var bottomPadding : CGFloat = 0
@@ -35,6 +36,20 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let screenWidth = UIScreen.main.bounds.width
         let screenHeight = UIScreen.main.bounds.height
+        
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Reminders here.."
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+        
+        /*let searchTF = UITextField(frame: CGRect(x: 0, y: topPadding, width: screenWidth, height: 40))
+        view.addSubview(searchTF)
+        
+        searchTF.delegate = self
+        searchTF.textAlignment = .center
+        searchTF.placeholder = "Search Here.."*/
         
         tableView = UITableView(frame: CGRect(x: 0, y: topPadding, width: screenWidth, height: screenHeight - topPadding - bottomPadding))
         view.addSubview(tableView)
@@ -54,6 +69,12 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         addNewB.addTarget(self, action: #selector(toNextView), for: .touchUpInside)
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func dismissKeyboard (_ sender: UITapGestureRecognizer) {
+        self.view.endEditing(true)
     }
     
     @objc func toNextView() {
@@ -65,7 +86,7 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableViewArray.count
+        return filteredArray.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -74,7 +95,7 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let objectData = tableViewArray[indexPath.row]
+        let objectData = filteredArray[indexPath.row]
         
         let alertVC = UIAlertController(title: objectData.value(forKey: "title") as? String, message: objectData.value(forKey: "desc") as? String, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "Noted.", style: .cancel, handler: nil))
@@ -88,10 +109,10 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         
-        let objectData = tableViewArray[indexPath.row]
+        let objectData = filteredArray[indexPath.row]
         
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(abbreviation: "HKT")
+        dateFormatter.timeZone = TimeZone(abbreviation: "WIT")
         dateFormatter.dateFormat = "dd MMMM yyyy, HH:mm"
         
         let dateObject = objectData.value(forKey: "dateTime") as! Date
@@ -99,11 +120,12 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let dateString = dateFormatter.string(from: dateObject)
         
         let correctedDate = dateFormatter.date(from: dateString)!
-            
-        print("Index <--\(indexPath.row)-->")
-        print(objectData.value(forKey: "dateTime") as! Date)
         
-        if Date() > correctedDate/*objectData.value(forKey: "dateTime") as! Date*/ {
+        print("Index <--\(indexPath.row)-->")
+        
+        print(dateString)
+        
+        if UpdateDate(date: Date()) > correctedDate {
             cell.backgroundColor = .systemRed
         }else{
             cell.backgroundColor = .systemGreen
@@ -166,7 +188,9 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // retrieve data from database
         tableViewArray = loadEntriesFromDatabase()
         
-        print("number of entries returned = \(tableViewArray.count)")
+        filteredArray = tableViewArray
+        
+        print("number of entries returned = \(filteredArray.count)")
         
         self.tableView.reloadData()
     }
@@ -220,12 +244,31 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
             return
         }
         
-        print("reached here")
         defaults.setValue("done", forKey: "firstCame")
         
         self.reloadDB()
     }
-
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    /// Update date to WIT timezone
+    func UpdateDate(date: Date) -> Date {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "WIT")
+        dateFormatter.dateFormat = "dd MMMM yyyy, HH:mm"
+        
+        let dateString = dateFormatter.string(from: date)
+        
+        print("Update Date dateString = \(dateString)")
+        
+        let correctedDate = dateFormatter.date(from: dateString)!
+        
+        return correctedDate
+    }
 }
 
 extension String {
@@ -233,7 +276,7 @@ extension String {
     func format() -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy HH:mm"
-        dateFormatter.timeZone = TimeZone.init(abbreviation: "HKT")
+        dateFormatter.timeZone = TimeZone.init(abbreviation: "WIT")
         
         print(self)
         
@@ -244,4 +287,30 @@ extension String {
         return newDate
     }
     
+}
+
+extension FirstViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        
+        let searchBar = searchController.searchBar
+        
+        if searchBar.text! != "" {
+            filterContentForSearchText(searchBar.text!)
+        }else{
+            filteredArray = tableViewArray
+        }
+        
+        tableView.reloadData()
+    
+    }
+    
+    func filterContentForSearchText(_ searchText: String) {
+        
+        filteredArray = tableViewArray.filter({ (object: NSManagedObject) -> Bool in
+            
+            return (object.value(forKey: "desc") as! String).lowercased().contains(searchText.lowercased()) || (object.value(forKey: "title") as! String).lowercased().contains(searchText.lowercased())
+            
+        })
+        
+    }
 }
